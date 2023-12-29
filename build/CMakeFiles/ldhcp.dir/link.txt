@@ -1,1 +1,0 @@
-gcc -rdynamic CMakeFiles/ldhcp.dir/home/letder/workspace/dev/c/projects/ldhcp/src/main.c.o CMakeFiles/ldhcp.dir/home/letder/workspace/dev/c/projects/ldhcp/src/server/server.c.o CMakeFiles/ldhcp.dir/home/letder/workspace/dev/c/projects/ldhcp/src/server/server_pool.c.o CMakeFiles/ldhcp.dir/home/letder/workspace/dev/c/projects/ldhcp/src/transaction/request.c.o -o ldhcp 
