@@ -1,8 +1,7 @@
-project(MiProyecto C)
+project(LDHCP)
 set(CMAKE_C_COMPILER gcc)
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
 file(MAKE_DIRECTORY build)
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build)
-set(EXECUTABLE_OUTPUT_PATH ${CMAKE_BINARY_DIR})
 
 set(SOURCES
     src/main.c

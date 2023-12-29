@@ -7,11 +7,12 @@ function make_ldhcp() {
       cd build
       cmake .. &>/dev/null
       echo "[#] LDHCP successfully compiled"
+      make
       echo "[#] binary: $(pwd)/ldhcp" 
       cd ..
    else
       cd build
-      make .
+      make
       echo "[#] LDHCP successfully compiled"
       echo "[#] binary: $(pwd)/ldhcp" 
       cd ..
