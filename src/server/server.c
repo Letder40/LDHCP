@@ -1,5 +1,4 @@
-#include <time.h>
-#include "server_pool.c"
+#include "server.h"
 
 void server_configure(ServerData* server_config) {
    server_config->interface = "wlo1"; 
