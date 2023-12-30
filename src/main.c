@@ -23,7 +23,7 @@ void handle_conn(int fd) {
          continue;
       };
 
-      switch (dhcp_request.options[0].value[0]) {
+      switch (dhcp_request.request_type) {
          case DISCOVER:
             printf("discover...\n");
             break;
@@ -34,8 +34,6 @@ void handle_conn(int fd) {
             continue;
             break;
       }
-
-      printf("%d-%d-%d-%d\n", dhcp_request.transaction_id[0], dhcp_request.transaction_id[1], dhcp_request.transaction_id[2], dhcp_request.transaction_id[3]);
 
       int buff_size = 1024;
       byte response_buff[buff_size];

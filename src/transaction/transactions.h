@@ -4,17 +4,17 @@
 typedef unsigned long size_t;
 typedef unsigned char byte;
 
-typedef struct {
-   byte id;
-   byte lenght;
-   byte* value;
-} DhcpOption;
+typedef enum  {
+   REQUESTED,
+   NO_REQUESTED,
+} AddrRequest;
 
-#define OPTION_ARR_SIZE 256
 typedef struct {
+   byte request_type;
    byte transaction_id[4];
-   int number_options;
-   DhcpOption options[OPTION_ARR_SIZE];
+   AddrRequest request_state;
+   byte requested_addr[4];
+   byte client_mac[6];
 } DhcpRequest;
 
 enum DHCP_MessageType {
@@ -29,8 +29,8 @@ enum DHCP_MessageType {
 #define BOOT_REPLY 0x02
 #define HARDWARE_ETHERNET 0x01
 #define ETHERNET_LENGHT 0x06
-#define REQUEST_END 0xff
 #define DHCP_MagicCookie "\x63\x82\x53\x63"
+#define REQUEST_END 0xff
 
 int read_request(byte* buff, size_t buff_lenght, DhcpRequest *dhcp_request, char *client_ip);
 
