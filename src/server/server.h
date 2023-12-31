@@ -18,14 +18,15 @@ typedef struct PoolItem {
    time_t leased_in;
 } PoolItem;
 
-typedef struct {
-   PoolItem* poolitems;
-   size_t pool_size;
-} Pool;
+typedef struct vector {
+   size_t size; 
+   size_t capacity; //real capacity
+   PoolItem* pool_items;
+} PoolVector;
 
 typedef struct {
    char* interface;
-   Pool* pool;
+   PoolVector* pool;
    byte first_addr[4];
    byte last_addr[4];
    byte next_addr[4];
@@ -36,5 +37,14 @@ typedef struct {
 } ServerData;
 
 void server_configure(ServerData* server_config);
+
+//vector functions
+PoolVector* pool_create();
+
+void pool_growth(PoolVector* pool_vector);
+
+void pool_insert_item(PoolVector* pool_vector, PoolItem pool_item);
+
+void pool_free(PoolVector* pool_vector);
 
 #endif
