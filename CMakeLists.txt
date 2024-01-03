@@ -6,7 +6,7 @@ file(MAKE_DIRECTORY build)
 set(SOURCES
     src/main.c
     src/server/server.c
-    src/server/server_pool.c
+    src/server/vector.c
     src/transaction/request.c
 )
 

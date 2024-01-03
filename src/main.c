@@ -5,6 +5,7 @@
 #include <sys/socket.h>
 #include <stdlib.h>
 
+#include "server/server.h"
 #include "transaction/transactions.h"
 
 #define MAX_REQUEST_SIZE 2048
@@ -43,13 +44,15 @@ void handle_conn(int fd) {
    // sendto(fd, response_buff, buff_size, 0, (struct sockaddr*)&client_addr, len);
 }
 
-int serve(in_addr_t s_addr, unsigned int port) {
+int serve(char* interface, unsigned int port) {
    struct sockaddr_in addr;
-   addr.sin_addr.s_addr = s_addr;
+   addr.sin_addr.s_addr = INADDR_ANY;
    addr.sin_family = AF_INET;
    addr.sin_port = htons(port);
 
-   int fd = socket(AF_INET, SOCK_DGRAM, 0);
+   int fd = socket(INADDR_ANY, SOCK_DGRAM, 0);
+   
+   setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, interface, strlen(interface));
 
    if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
       perror("bind error");
@@ -59,6 +62,9 @@ int serve(in_addr_t s_addr, unsigned int port) {
 }
 
 int main(int argc, char **argv) {
-   int fd = serve(INADDR_ANY, 67);
+   ServerData server_data;
+   server_configure(&server_data);
+
+   int fd = serve(server_data.interface, 67);
    handle_conn(fd);
 }

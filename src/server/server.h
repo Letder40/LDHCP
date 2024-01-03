@@ -26,6 +26,7 @@ typedef struct vector {
 
 typedef struct {
    char* interface;
+   byte server_addr[4];
    PoolVector* pool;
    byte first_addr[4];
    byte last_addr[4];
@@ -47,4 +48,5 @@ void pool_insert_item(PoolVector* pool_vector, PoolItem pool_item);
 
 void pool_free(PoolVector* pool_vector);
 
+void get_server_address(byte server_addr[4], char* server_ifname);
 #endif

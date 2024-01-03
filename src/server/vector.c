@@ -1,5 +1,4 @@
 #include <stdlib.h>
-#include <stdio.h>
 #include "server.h"
 
 PoolVector* pool_create() {
@@ -13,7 +12,6 @@ PoolVector* pool_create() {
 
 void pool_growth(PoolVector* pool_vector) {
    pool_vector->capacity *= 2;
-   printf("%lu\n", pool_vector->capacity);
    pool_vector->pool_items = realloc(pool_vector->pool_items, sizeof(PoolItem) * pool_vector->capacity);
 } 
 

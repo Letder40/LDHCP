@@ -5,7 +5,7 @@ function make_ldhcp() {
       mkdir build
       echo "[#] Created build directory"
       cd build
-      cmake .. &>/dev/null
+      cmake ..
       echo "[#] LDHCP successfully compiled"
       make
       echo "[#] binary: $(pwd)/ldhcp" 
