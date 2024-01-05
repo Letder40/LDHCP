@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <netinet/in.h>
+#include <arpa/inet.h>
 #include "transactions.h"
 #include "../server/server.h"
 
@@ -138,5 +139,8 @@ void response(int fd, enum DHCP_MessageType message_type, DhcpRequest dhcp_reque
    }
 
    size_t size = response_ptr;
+   if (addr.sin_addr.s_addr == INADDR_ANY) {
+      addr.sin_addr.s_addr = INADDR_BROADCAST;
+   }
    sendto(fd, response_buff, size, 0, (struct sockaddr*)&addr, (unsigned int) sizeof(addr));
 }

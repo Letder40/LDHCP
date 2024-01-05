@@ -52,19 +52,18 @@ int serve(char* interface, unsigned int port) {
    addr.sin_port = htons(port);
 
    int fd = socket(AF_INET, SOCK_DGRAM, 0);
-   int broadcast_enable = 1;
-   if (setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &broadcast_enable, sizeof(broadcast_enable)) == -1) {
-      perror("socket broadcast option: ");
-   }
    
-   if(setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, interface, strlen(interface)) == -1) {
+   int broadcast_enable = 1;
+   if (setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &broadcast_enable, sizeof(broadcast_enable)) == -1)
+      perror("socket broadcast option: "); 
+   if(setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, interface, strlen(interface)) == -1)
       perror("socket bind_device option: ");
-   } 
 
    if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
       perror("bind error");
       exit(1);
    }
+
    return fd;
 }
 
