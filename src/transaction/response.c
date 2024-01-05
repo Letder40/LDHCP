@@ -53,7 +53,7 @@ void response(int fd, enum DHCP_MessageType message_type, DhcpRequest dhcp_reque
 
    byte response_buff[MAX_BUFF] = {0};
    int response_ptr = 0;
-   response_buff[response_ptr++] = message_type; // OFFER || ACK
+   response_buff[response_ptr++] = BOOT_REPLY; 
    response_buff[response_ptr++] = HARDWARE_ETHERNET; // HARWARDE TYPE
    response_buff[response_ptr++] = ETHERNET_LENGHT;
    response_buff[response_ptr++] = 0x00; // HOPS NOT IMPLEMENTED
