@@ -1,4 +1,5 @@
 #ifndef SERVER_H
+#define DEBUG
 #define SERVER_H
 
 #include <time.h>
@@ -34,10 +35,12 @@ typedef struct {
    byte netmask[4];
    byte gateway[4];
    byte dns_server[4];
-   time_t lease_time;
+   int lease_time;
 } ServerData;
 
 void server_configure(ServerData* server_config);
+
+void server_check_pool(ServerData* server_data);
 
 //vector functions
 PoolVector* pool_create();

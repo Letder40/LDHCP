@@ -32,6 +32,17 @@ void get_server_address(byte server_addr[4], char* server_ifname) {
    while ((token = strtok(NULL, ".")));
 }
 
+void server_check_pool(ServerData* server_data) {
+   PoolItem* pool_items = server_data->pool->pool_items;
+   time_t current_time;
+   time(&current_time);
+   for (int i = 0; i<server_data->pool->size; i++) {
+      if (pool_items[i].state == BUSY && current_time - pool_items[i].leased_in > server_data->lease_time) {
+         pool_items[i].state = FREE;
+      }
+   }
+} 
+
 void server_create_pool(ServerData* server_data) {
    byte current_ip[4] = {0};
    memcpy(&current_ip, server_data->first_addr, 4);
@@ -56,28 +67,25 @@ void server_create_pool(ServerData* server_data) {
 }
 
 void server_configure(ServerData* server_data) {
-   server_data->pool = pool_create();
-   server_data->interface = "wlo1";
+   server_data->interface = "wlp4s0";
    server_data->lease_time = 12 * 3600;
    byte server_addr[4];
-   byte first_addr[4] = {192, 168, 0, 1};
-   byte last_addr[4] = {192, 168, 0, 255};
    get_server_address(server_addr, server_data->interface);
    memcpy(server_data->server_addr, server_addr, 4);
+   
+   // POOL 
+   server_data->pool = pool_create();
+   byte first_addr[4] = {192, 168, 0, 10};
+   byte last_addr[4] = {192, 168, 0, 254};
    memcpy(server_data->first_addr, first_addr, 4);
    memcpy(server_data->last_addr, last_addr, 4);
    server_create_pool(server_data);
-}
 
-int main() {
-   ServerData server_data;
-   server_configure(&server_data);
-   /*for (int i = 0; i < server_data.pool->size; i++) {
-      printf("--------------------------\n");
-      printf("Pool Item: %d\n", i);
-      printf("addr: %u.%u.%u.%u\n", server_data.pool->pool_items[i].ip[0],server_data.pool->pool_items[i].ip[1],server_data.pool->pool_items[i].ip[2],server_data.pool->pool_items[i].ip[3]);
-      printf("state: %d\n", server_data.pool->pool_items[i].state);
-   }*/
-   pool_free(server_data.pool);
-   //printf("server address: %u.%u.%u.%u\n",  server_data.server_addr[0], server_data.server_addr[1], server_data.server_addr[2], server_data.server_addr[3]);
+   // NETWORK
+   byte netmask[4] = {255, 255, 255, 0};
+   byte gateway[4] = {192, 168, 0, 1};
+   byte dns_server[4] = {1, 1, 1, 1};
+   memcpy(server_data->netmask, netmask, 4);
+   memcpy(server_data->gateway, gateway, 4);
+   memcpy(server_data->dns_server, dns_server, 4);
 }

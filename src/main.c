@@ -9,8 +9,10 @@
 #include "transaction/transactions.h"
 
 #define MAX_REQUEST_SIZE 2048
-void handle_conn(int fd) {
+void handle_conn(int fd, ServerData* server_data) {
    while (1) {
+      server_check_pool(server_data);
+
       struct sockaddr_in client_addr;
       socklen_t len = sizeof(client_addr);
 
@@ -26,10 +28,11 @@ void handle_conn(int fd) {
 
       switch (dhcp_request.request_type) {
          case DISCOVER:
-            printf("discover...\n");
+            response(fd, OFFER, dhcp_request, client_addr, server_data);
             break;
          case REQUEST:
-            printf("request...\n");
+         case INFORM:
+            response(fd, ACK, dhcp_request, client_addr, server_data);
             break;
          default:
             continue;
@@ -40,8 +43,6 @@ void handle_conn(int fd) {
       byte response_buff[buff_size];
       memset(request_buff, 0, buff_size);
    }
-   printf("valid ip_address sending response\n");
-   // sendto(fd, response_buff, buff_size, 0, (struct sockaddr*)&client_addr, len);
 }
 
 int serve(char* interface, unsigned int port) {
@@ -50,9 +51,15 @@ int serve(char* interface, unsigned int port) {
    addr.sin_family = AF_INET;
    addr.sin_port = htons(port);
 
-   int fd = socket(INADDR_ANY, SOCK_DGRAM, 0);
+   int fd = socket(AF_INET, SOCK_DGRAM, 0);
+   int broadcast_enable = 1;
+   if (setsockopt(fd, SOL_SOCKET, SO_BROADCAST, &broadcast_enable, sizeof(broadcast_enable)) == -1) {
+      perror("socket broadcast option: ");
+   }
    
-   setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, interface, strlen(interface));
+   if(setsockopt(fd, SOL_SOCKET, SO_BINDTODEVICE, interface, strlen(interface)) == -1) {
+      perror("socket bind_device option: ");
+   } 
 
    if (bind(fd, (const struct sockaddr *)&addr, sizeof(addr)) == -1) {
       perror("bind error");
@@ -66,5 +73,5 @@ int main(int argc, char **argv) {
    server_configure(&server_data);
 
    int fd = serve(server_data.interface, 67);
-   handle_conn(fd);
+   handle_conn(fd, &server_data);
 }

@@ -3,14 +3,13 @@
 
 #include "transactions.h"
 
-#define DEBUG
 int read_request(byte* buff, size_t buff_lenght, DhcpRequest *dhcp_request, char *client_ip) {
    if (buff[0] != BOOT_REQUEST) {
       fprintf(stderr, "[!] invalid dhcp request type, from %s\n", client_ip);
       return -1;
    }
 
-   memcpy(&buff[28], dhcp_request->client_mac, 6);
+   memcpy(dhcp_request->client_mac, &buff[28], 6);
    #ifdef DEBUG
    printf("Request from: %02x-%02x-%02x-%02x-%02x-%02x\n", dhcp_request->client_mac[0], dhcp_request->client_mac[1], dhcp_request->client_mac[2], dhcp_request->client_mac[3], dhcp_request->client_mac[4], dhcp_request->client_mac[5]);
    #endif
