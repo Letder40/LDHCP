@@ -23,7 +23,7 @@ time_t current_time_unix() {
 int get_next_addr(DhcpRequest dhcp_request, ServerData server_data, byte next_addr[4]) {
    PoolItem* pool_items = server_data.pool->pool_items; 
 
-   if (!memcmp(dhcp_request.requested_addr, "\x00\x00\x00\x00", 4)) {
+   if (memcmp(dhcp_request.requested_addr, "\x00\x00\x00\x00", 4) != 0) {
       for (int i = 0; i<server_data.pool->size; i++) {
          if (!memcmp(dhcp_request.requested_addr, pool_items[i].ip, 4) && (pool_items[i].state == FREE || !memcmp(dhcp_request.client_mac, pool_items->client_mac, 6))){
             memcpy(next_addr, pool_items[i].ip, 4);
