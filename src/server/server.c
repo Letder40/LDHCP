@@ -46,6 +46,7 @@ void get_server_address(byte server_addr[4], char* server_ifname) {
    strncpy(ifr.ifr_name, server_ifname, IFNAMSIZ);
    ioctl(fd, SIOCGIFADDR, &ifr);
    char* iface_address_string = inet_ntoa(((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr);
+   ipstr_tobytes(iface_address_string, server_addr);
 }
 
 void server_check_pool(ServerData* server_data) {
@@ -83,7 +84,7 @@ void server_create_pool(ServerData* server_data) {
 }
 
 void server_configure(ServerData* server_data) {
-   server_data->interface = "enp0s3";
+   server_data->interface = "vboxnet0";
    server_data->lease_time = 12 * 3600;
    byte server_addr[4];
    get_server_address(server_addr, server_data->interface);
