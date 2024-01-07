@@ -1,5 +1,4 @@
 #ifndef SERVER_H
-#define DEBUG
 #define SERVER_H
 
 #include <time.h>
@@ -38,11 +37,16 @@ typedef struct {
    int lease_time;
 } ServerData;
 
+#include "../transaction/transactions.h"
+
+void get_server_address(byte server_addr[4], char* server_ifname);
+
 void server_configure(ServerData* server_config);
 
 void server_check_pool(ServerData* server_data);
 
-//vector functions
+void server_remove_client(ServerData* server_data, DhcpRequest dhcp_request, struct sockaddr_in client_addr);
+
 PoolVector* pool_create();
 
 void pool_growth(PoolVector* pool_vector);
@@ -51,5 +55,4 @@ void pool_insert_item(PoolVector* pool_vector, PoolItem pool_item);
 
 void pool_free(PoolVector* pool_vector);
 
-void get_server_address(byte server_addr[4], char* server_ifname);
 #endif

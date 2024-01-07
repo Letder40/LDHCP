@@ -61,9 +61,15 @@ int read_request(byte* buff, size_t buff_lenght, DhcpRequest *dhcp_request, char
       } 
       else {
          #ifdef DEBUG
+<<<<<<< Updated upstream
          printf("id -> X : %d \n", i);
          #endif
          for (int i = 0; i < lenght; i++) 
+=======
+         printf("id -> %i \n", id);
+         #endif
+         for (int i = 0; i<lenght; i++) 
+>>>>>>> Stashed changes
             readbuff_ptr++;
       }
       readbuff_ptr++;

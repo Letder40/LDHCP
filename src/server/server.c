@@ -12,6 +12,32 @@
 
 #include "server.h"
 
+void ipstr_tobytes(char* ip_string, byte dst_buff[4]) {
+   char* token;
+
+   int counter = 0;
+   token = strtok(ip_string, "."); 
+   do {
+      dst_buff[counter] = (byte) atoi(token);
+      counter++;
+   }
+   while ((token = strtok(NULL, ".")));
+}
+
+void server_remove_client(ServerData* server_data, DhcpRequest dhcp_request, struct sockaddr_in client_addr){
+   char* client_addr_string = inet_ntoa(client_addr.sin_addr);
+   byte client_addr_bytes[4];
+   ipstr_tobytes(client_addr_string, client_addr_bytes);
+   
+   PoolItem* pool_items = server_data->pool->pool_items;
+
+   for (int i = 0; i<server_data->pool->size; i++) {
+      if(!memcmp(pool_items[i].client_mac, dhcp_request.client_mac, 6) && !memcmp(pool_items[i].ip, client_addr_bytes, 4)) {
+         pool_items[i].state = FREE;
+      }
+   }
+}
+
 void get_server_address(byte server_addr[4], char* server_ifname) {
    struct ifreq ifr;
    ifr.ifr_addr.sa_family = AF_INET;
@@ -19,17 +45,7 @@ void get_server_address(byte server_addr[4], char* server_ifname) {
    int fd = socket(AF_INET, SOCK_DGRAM, 0);
    strncpy(ifr.ifr_name, server_ifname, IFNAMSIZ);
    ioctl(fd, SIOCGIFADDR, &ifr);
-   
    char* iface_address_string = inet_ntoa(((struct sockaddr_in*)&ifr.ifr_addr)->sin_addr);
-   char* token;
-
-   int counter = 0;
-   token = strtok(iface_address_string, "."); 
-   do {
-      server_addr[counter] = (byte) atoi(token);
-      counter++;
-   }
-   while ((token = strtok(NULL, ".")));
 }
 
 void server_check_pool(ServerData* server_data) {
@@ -67,7 +83,7 @@ void server_create_pool(ServerData* server_data) {
 }
 
 void server_configure(ServerData* server_data) {
-   server_data->interface = "wlp4s0";
+   server_data->interface = "wlo1";
    server_data->lease_time = 12 * 3600;
    byte server_addr[4];
    get_server_address(server_addr, server_data->interface);

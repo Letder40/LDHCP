@@ -6,7 +6,6 @@
 #include <stdlib.h>
 
 #include "server/server.h"
-#include "transaction/transactions.h"
 
 #define MAX_REQUEST_SIZE 2048
 void handle_conn(int fd, ServerData* server_data) {
@@ -34,6 +33,8 @@ void handle_conn(int fd, ServerData* server_data) {
          case INFORM:
             response(fd, ACK, dhcp_request, client_addr, server_data);
             break;
+         case RELEASE:
+            server_remove_client(server_data, dhcp_request, client_addr);
          default:
             continue;
             break;

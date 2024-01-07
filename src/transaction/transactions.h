@@ -6,9 +6,6 @@
 typedef unsigned long size_t;
 typedef unsigned char byte;
 
-#ifndef SERVER_H
-#include "../server/server.h"
-#endif
 
 typedef enum  {
    REQUESTED,
@@ -40,6 +37,10 @@ enum DHCP_MessageType {
 #define ETHERNET_LENGHT 0x06
 #define DHCP_MagicCookie "\x63\x82\x53\x63"
 #define REQUEST_END 0xff
+
+#ifndef SERVER_H
+#include "../server/server.h"
+#endif
 
 int read_request(byte* buff, size_t buff_lenght, DhcpRequest *dhcp_request, char *client_ip);
 

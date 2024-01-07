@@ -139,8 +139,13 @@ void response(int fd, enum DHCP_MessageType message_type, DhcpRequest dhcp_reque
    }
 
    size_t size = response_ptr;
+<<<<<<< Updated upstream
    if (addr.sin_addr.s_addr == INADDR_ANY) {
       addr.sin_addr.s_addr = INADDR_BROADCAST;
    }
+=======
+   if (addr.sin_addr.s_addr == INADDR_ANY)
+      addr.sin_addr.s_addr = INADDR_BROADCAST;
+>>>>>>> Stashed changes
    sendto(fd, response_buff, size, 0, (struct sockaddr*)&addr, (unsigned int) sizeof(addr));
 }
