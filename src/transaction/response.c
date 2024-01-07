@@ -21,6 +21,10 @@ time_t current_time_unix() {
 }
 
 int get_next_addr(DhcpRequest dhcp_request, ServerData server_data, byte next_addr[4]) {
+   #ifdef DEBUF
+   printf("requested addr: %u.%u.%u.%u\n", dhcp_request.requested_addr[0], dhcp_request.requested_addr[1], dhcp_request.requested_addr[2], dhcp_request.requested_addr[3]);
+   #endif
+
    PoolItem* pool_items = server_data.pool->pool_items; 
 
    if (memcmp(dhcp_request.requested_addr, "\x00\x00\x00\x00", 4) != 0) {

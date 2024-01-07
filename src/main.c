@@ -35,14 +35,11 @@ void handle_conn(int fd, ServerData* server_data) {
             break;
          case RELEASE:
             server_remove_client(server_data, dhcp_request, client_addr);
+            break;
          default:
             continue;
             break;
       }
-
-      int buff_size = 1024;
-      byte response_buff[buff_size];
-      memset(request_buff, 0, buff_size);
    }
 }
 

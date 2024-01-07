@@ -33,7 +33,7 @@ void server_remove_client(ServerData* server_data, DhcpRequest dhcp_request, str
 
    for (int i = 0; i<server_data->pool->size; i++) {
       if(!memcmp(pool_items[i].client_mac, dhcp_request.client_mac, 6) && !memcmp(pool_items[i].ip, client_addr_bytes, 4)) {
-         pool_items[i].state = FREE;
+         
       }
    }
 }
@@ -83,7 +83,7 @@ void server_create_pool(ServerData* server_data) {
 }
 
 void server_configure(ServerData* server_data) {
-   server_data->interface = "wlo1";
+   server_data->interface = "enp0s3";
    server_data->lease_time = 12 * 3600;
    byte server_addr[4];
    get_server_address(server_addr, server_data->interface);
@@ -91,15 +91,15 @@ void server_configure(ServerData* server_data) {
    
    // POOL 
    server_data->pool = pool_create();
-   byte first_addr[4] = {192, 168, 0, 10};
-   byte last_addr[4] = {192, 168, 0, 254};
+   byte first_addr[4] = {192, 168, 56, 10};
+   byte last_addr[4] = {192, 168, 56, 254};
    memcpy(server_data->first_addr, first_addr, 4);
    memcpy(server_data->last_addr, last_addr, 4);
    server_create_pool(server_data);
 
    // NETWORK
    byte netmask[4] = {255, 255, 255, 0};
-   byte gateway[4] = {192, 168, 0, 1};
+   byte gateway[4] = {192, 168, 56, 1};
    byte dns_server[4] = {1, 1, 1, 1};
    memcpy(server_data->netmask, netmask, 4);
    memcpy(server_data->gateway, gateway, 4);
