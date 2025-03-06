@@ -7,37 +7,37 @@ typedef unsigned char byte;
 typedef unsigned long size_t;
 
 typedef enum {
-   FREE,
-   BUSY,
+    FREE,
+    BUSY,
 } PoolItemState;
 
 typedef struct PoolItem {
-   PoolItemState state;
-   byte client_mac[6];
-   byte ip[4];
-   time_t leased_in;
+    PoolItemState state;
+    byte client_mac[6];
+    byte ip[4];
+    time_t leased_in;
 } PoolItem;
 
 typedef struct vector {
-   size_t size; 
-   size_t capacity; //real capacity
-   PoolItem* pool_items;
+    size_t size; 
+    size_t capacity; //real capacity
+    PoolItem* pool_items;
 } PoolVector;
 
 typedef struct {
-   char* interface;
-   byte server_addr[4];
-   PoolVector* pool;
-   byte first_addr[4];
-   byte last_addr[4];
-   byte next_addr[4];
-   byte netmask[4];
-   byte gateway[4];
-   byte dns_server[4];
-   int lease_time;
+    char* interface;
+    byte server_addr[4];
+    PoolVector* pool;
+    byte first_addr[4];
+    byte last_addr[4];
+    byte next_addr[4];
+    byte netmask[4];
+    byte gateway[4];
+    byte dns_server[4];
+    int lease_time;
 } ServerData;
 
-#include "../transaction/transactions.h"
+#include "transactions.h"
 
 void get_server_address(byte server_addr[4], char* server_ifname);
 
