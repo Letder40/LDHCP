@@ -1,6 +1,6 @@
+cmake_minimum_required(VERSION 3.31)
 project(LDHCP)
 set(CMAKE_C_COMPILER gcc)
-#set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ../)
 file(MAKE_DIRECTORY build)
 
 set(SOURCES
