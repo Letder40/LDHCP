@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.31)
 project(LDHCP)
 set(CMAKE_C_COMPILER gcc)
+
 file(MAKE_DIRECTORY build)
 
 set(SOURCES

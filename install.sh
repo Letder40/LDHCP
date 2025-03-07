@@ -1,7 +1,8 @@
 #!/bin/bash
 
 function make_ldhcp() {
-    cmake build
+    cmake -B build
+    make -C build
 }
 
 function check_root() {
@@ -20,7 +21,7 @@ function install() {
       read -p "[?] Path : " path
    fi   
 
-   cp ./ldhcp $path
+   cp ./build/ldhcp $path
    if [[ $? != 0 ]]; then
       echo "[!] Something went wrong, check installation path."
    else 
